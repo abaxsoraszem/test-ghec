@@ -5,5 +5,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: |
-        echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
-        curl --location --request GET 'https://app.usercentrics.eu/browser-ui/2.43.0/bundle.js' 
+          echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
+          curl --location --request GET 'https://app.usercentrics.eu/browser-ui/2.43.0/bundle.js' 
