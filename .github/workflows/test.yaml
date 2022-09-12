@@ -5,5 +5,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: |
-          echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
-          curl --location --request GET 'https://app.usercentrics.eu/browser-ui/2.43.0/bundle.js' 
+          echo "Download and publish new usercentrics version."
+          
+          VERSION=2.43.0
+          DIR=downloads/usercentrics
+
+          rm -rf $DIR
+          mkdir -p $DIR
+          cd $DIR
+          curl -o ./bundle.js.gz --location --request GET "https://app.usercentrics.eu/browser-ui/$VERSION/bundle.js" 
+          gunzip ./bundle.js.gz
+          npm config set init-version $VERSION
+          npm init --yes --scope @csaba
+          npm publish
