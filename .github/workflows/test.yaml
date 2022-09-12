@@ -4,10 +4,15 @@ jobs:
   download-usercentrics:
     runs-on: ubuntu-latest
     steps:
-      - run: |
-          echo "Download and publish new usercentrics version."
-          
+      - shell: bash
+        env:
+          NPM_PW_BASE64: ${{ secrets.NPM_PW_BASE64 }}
+        run: |
           VERSION=2.43.0
+
+
+          echo "Download and publish new usercentrics version ${VERSION}"
+          
           DIR=downloads/usercentrics
 
           rm -rf $DIR
@@ -17,4 +22,11 @@ jobs:
           gunzip ./bundle.js.gz
           npm config set init-version $VERSION
           npm init --yes --scope @csaba
+
+          echo "@csaba:registry=https://abaxsoraszem.jfrog.io/artifactory/api/npm/csaba-npm/" >> ~/.npmrc
+          echo "//abaxsoraszem.jfrog.io/artifactory/api/npm/csaba-npm/:username=abax-deployer" >> ~/.npmrc
+          echo "//abaxsoraszem.jfrog.io/artifactory/api/npm/csaba-npm/:_password=${NPM_PW_BASE64}" >> ~/.npmrc
+
+          cat ~/.npmrc
+
           npm publish
