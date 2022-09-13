@@ -20,8 +20,8 @@ jobs:
         env:
           NPM_PW_BASE64: ${{ secrets.NPM_PW_BASE64 }}
         run: |
+          VERSION=${{ github.event.inputs.USERCENTRICS_VERSION }}
           DIR=downloads/usercentrics
-          VERSION=${{ inputs.USERCENTRICS_VERSION }}
 
           echo "Download and publish new usercentrics version ${VERSION}"
           
