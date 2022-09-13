@@ -1,5 +1,17 @@
 name: GitHub Actions Demo
-on: [push]
+on: 
+  push: 
+  workflow_dispatch:
+    inputs:
+      USERCENTRICS_VERSION:
+        description: 'The semver of the usercentrics to download'
+        required: true
+        default: '2.43.0'
+env: 
+  REGISTRY: "//abaxsoraszem.jfrog.io/artifactory/api/npm/csaba-npm/"
+  NPM_USER: "abax-deployer"
+  NPM_SCOPE: "csaba"
+
 jobs:
   download-usercentrics:
     runs-on: ubuntu-latest
@@ -8,24 +20,26 @@ jobs:
         env:
           NPM_PW_BASE64: ${{ secrets.NPM_PW_BASE64 }}
         run: |
-          VERSION=2.43.0
 
 
-          echo "Download and publish new usercentrics version ${VERSION}"
+          echo "Download and publish new usercentrics version ${USERCENTRICS_VERSION}"
           
           DIR=downloads/usercentrics
 
           rm -rf $DIR
           mkdir -p $DIR
           cd $DIR
-          curl -o ./bundle.js.gz --location --request GET "https://app.usercentrics.eu/browser-ui/$VERSION/bundle.js" 
+          curl -o ./bundle.js.gz --location --request GET "https://app.usercentrics.eu/browser-ui/$USERCENTRICS_VERSION/bundle.js" 
           gunzip ./bundle.js.gz
-          npm config set init-version $VERSION
-          npm init --yes --scope @csaba
 
-          echo "@csaba:registry=https://abaxsoraszem.jfrog.io/artifactory/api/npm/csaba-npm/" >> ~/.npmrc
-          echo "//abaxsoraszem.jfrog.io/artifactory/api/npm/csaba-npm/:username=abax-deployer" >> ~/.npmrc
-          echo "//abaxsoraszem.jfrog.io/artifactory/api/npm/csaba-npm/:_password=${NPM_PW_BASE64}" >> ~/.npmrc
+
+
+          npm config set init-version $USERCENTRICS_VERSION
+          npm init --yes --scope @$NPM_SCOPE
+
+          echo "@$NPM_SCOPE:registry=https:$REGISTRY" >> ~/.npmrc
+          echo "$REGISTRY:username=$NPM_USER" >> ~/.npmrc
+          echo "$REGISTRY:_password=${NPM_PW_BASE64}" >> ~/.npmrc
 
           cat ~/.npmrc
 
