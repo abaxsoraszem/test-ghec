@@ -20,21 +20,21 @@ jobs:
         env:
           NPM_PW_BASE64: ${{ secrets.NPM_PW_BASE64 }}
         run: |
-
-
-          echo "Download and publish new usercentrics version ${{ inputs.USERCENTRICS_VERSION }}"
-          
           DIR=downloads/usercentrics
+          VERSION=${{ inputs.USERCENTRICS_VERSION }}
+
+          echo "Download and publish new usercentrics version ${VERSION}"
+          
 
           rm -rf $DIR
           mkdir -p $DIR
           cd $DIR
-          curl -o ./bundle.js.gz --location --request GET "https://app.usercentrics.eu/browser-ui/${{ inputs.USERCENTRICS_VERSION }}/bundle.js" 
+          curl -o ./bundle.js.gz --location --request GET "https://app.usercentrics.eu/browser-ui/${VERSION}/bundle.js" 
           gunzip ./bundle.js.gz
 
 
 
-          npm config set init-version ${{ inputs.USERCENTRICS_VERSION }}
+          npm config set init-version ${VERSION}
           npm init --yes --scope @$NPM_SCOPE
 
           echo "@$NPM_SCOPE:registry=https:$REGISTRY" >> ~/.npmrc
