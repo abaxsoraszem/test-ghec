@@ -1,4 +1,4 @@
-name: GitHub Actions Demo
+name: Download Usercentrics Bundle
 on: 
   push: 
   workflow_dispatch:
@@ -20,7 +20,10 @@ jobs:
         env:
           NPM_PW_BASE64: ${{ secrets.NPM_PW_BASE64 }}
         run: |
-          VERSION=${{ github.event.inputs.USERCENTRICS_VERSION }}
+          # VERSION=${{ github.event.inputs.USERCENTRICS_VERSION }}
+          
+          VERSION="2.43.0" && [[ "${{ github.event.inputs.USERCENTRICS_VERSION }}" != "" ]] && VERSION=${{ github.event.inputs.USERCENTRICS_VERSION }}
+
           DIR=downloads/usercentrics
 
           echo "Download and publish new usercentrics version ${VERSION}"
