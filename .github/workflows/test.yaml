@@ -22,19 +22,19 @@ jobs:
         run: |
 
 
-          echo "Download and publish new usercentrics version ${{ inputs.INPUT_USERCENTRICS_VERSION }}"
+          echo "Download and publish new usercentrics version ${{ inputs.USERCENTRICS_VERSION }}"
           
           DIR=downloads/usercentrics
 
           rm -rf $DIR
           mkdir -p $DIR
           cd $DIR
-          curl -o ./bundle.js.gz --location --request GET "https://app.usercentrics.eu/browser-ui/${{ inputs.INPUT_USERCENTRICS_VERSION }}/bundle.js" 
+          curl -o ./bundle.js.gz --location --request GET "https://app.usercentrics.eu/browser-ui/${{ inputs.USERCENTRICS_VERSION }}/bundle.js" 
           gunzip ./bundle.js.gz
 
 
 
-          npm config set init-version ${{ inputs.INPUT_USERCENTRICS_VERSION }}
+          npm config set init-version ${{ inputs.USERCENTRICS_VERSION }}
           npm init --yes --scope @$NPM_SCOPE
 
           echo "@$NPM_SCOPE:registry=https:$REGISTRY" >> ~/.npmrc
